@@ -1,10 +1,8 @@
-# TaskFlow — Task Management System
+# 📝 TaskFlow — Task Management System
 
-> A full-stack task management application built as part of a Software Engineering Assessment. TaskFlow allows users to register, log in, and perform full management of their personal tasks — with a timer system, statistics, and a polished dark UI.
+`A full-stack task management application built as part of a Software Engineering Assessment. TaskFlow allows users to register, log in, and perform full management of their personal tasks — with a timer system, statistics, and a polished dark UI.`
 
----
-
-## About the Project
+## ❗ About
 
 TaskFlow is a complete task management system with a Node.js backend API and a Next.js web frontend. Users can create, organize, and track their tasks with real-time search, filtering, and status management. The app also includes a built-in timer to track how long tasks take, time goal challenges, and an Apple Fitness-style statistics section that unlocks after completing 3 tasks.
 
@@ -12,9 +10,8 @@ TaskFlow is a complete task management system with a Node.js backend API and a N
 
 **Submitted by:** Debarka Mandal — March 2026
 
----
 
-## Tech Stack
+## 🧰 Tech Stack
 
 ### Backend
 | Technology | Purpose |
@@ -37,9 +34,7 @@ TaskFlow is a complete task management system with a Node.js backend API and a N
 | Lucide React | Icons |
 | React Hot Toast | Notifications |
 
----
-
-## Features
+## 🚀 Features
 
 ### Backend API
 - ✅ JWT Authentication — access token (15 min) + refresh token (7 days)
@@ -66,15 +61,13 @@ TaskFlow is a complete task management system with a Node.js backend API and a N
 - ✅ Silent token refresh — user never gets logged out unexpectedly
 - ✅ Responsive design
 
----
 
-## Demo Video
+## 🍿 Demo Video
 
-> 📹 **[Watch the demo video here]** — *(add your video link here)*
+ > **[Watch the demo video here]** — *(add your video link here)*
 
----
 
-## Project Structure
+## 🏗️ Project Structure
 
 ```
 task-management/
@@ -113,9 +106,7 @@ task-management/
         └── proxy.ts               ← route protection
 ```
 
----
-
-## API Endpoints
+## ⛳ API Endpoints
 
 ### Authentication
 | Method | Endpoint | Description | Auth Required |
@@ -142,19 +133,20 @@ task-management/
 | GET | `/timer` | Get all sessions | Yes |
 | GET | `/timer/stats` | Get aggregated stats | Yes |
 
----
-
-## Getting Started
+## 💻 Getting Started
 
 ### Prerequisites
 - Node.js v20 LTS — [nodejs.org](https://nodejs.org)
 - npm v10+
 - Git
+- TypeScript
+- Prisma
+- Express.js
 
 ### 1. Clone the repository
 ```bash
-git clone <your-repo-url>
-cd task-management
+git clone <(https://github.com/Da9TH5e/Tasker)>
+cd (any name for folder)
 ```
 
 ### 2. Set up the Backend
@@ -187,12 +179,10 @@ cd frontend
 npm install
 npm run dev
 ```
-
 App running at → **http://localhost:3000**
 
----
 
-## Common Issues
+## ⚠️ Common Issues
 
 **Tasks not showing** → Hard refresh (Ctrl+Shift+R) or log out and back in.
 
