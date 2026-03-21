@@ -211,6 +211,7 @@ export default function DashboardPage() {
             <div className="text-[#cedadb]"/>
             <span style={{
               fontSize: 15,
+              paddingTop: '5px',
               letterSpacing: '0.54em',
               textTransform: 'uppercase',
               color: '#cedadb',
