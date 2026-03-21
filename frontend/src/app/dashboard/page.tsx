@@ -17,6 +17,22 @@ import TimerSection from '@/components/TimerSection'
 import StatsSection from '@/components/StatsSection'
 import Aurora from '@/components/Aurora'
 
+
+const AVATAR_COLORS = [
+  { bg: 'rgba(13,148,136,0.2)',  border: 'rgba(13,148,136,0.4)',  text: '#0d9488' },  // teal
+  { bg: 'rgba(147,51,234,0.2)',  border: 'rgba(147,51,234,0.4)',  text: '#9333ea' },  // purple
+  { bg: 'rgba(245,158,11,0.2)',  border: 'rgba(245,158,11,0.4)',  text: '#f59e0b' },  // amber
+  { bg: 'rgba(239,68,68,0.2)',   border: 'rgba(239,68,68,0.4)',   text: '#ef4444' },  // red
+  { bg: 'rgba(59,130,246,0.2)',  border: 'rgba(59,130,246,0.4)',  text: '#3b82f6' },  // blue
+  { bg: 'rgba(236,72,153,0.2)',  border: 'rgba(236,72,153,0.4)',  text: '#ec4899' },  // pink
+  { bg: 'rgba(34,197,94,0.2)',   border: 'rgba(34,197,94,0.4)',   text: '#22c55e' },  // green
+]
+
+const getAvatarColor = (email: string) => {
+  const index = email.charCodeAt(0) % AVATAR_COLORS.length
+  return AVATAR_COLORS[index]!
+}
+
 const glassSlab: React.CSSProperties = {
   background: 'rgba(3, 10, 10, 0.55)',
   border: '1px solid rgba(255,255,255,0.08)',
@@ -162,6 +178,8 @@ export default function DashboardPage() {
   const totalCount      = allTasks.length
   const statsUnlocked   = completedCount >= 3
 
+  const avatarColor = getAvatarColor(user?.email || 'a')
+
   const today          = new Date().toDateString()
   const todayTasks     = allTasks.filter(t => new Date(t.createdAt).toDateString() === today)
   const todayCompleted = allTasks.filter(t =>
@@ -223,16 +241,46 @@ export default function DashboardPage() {
               Tasker
             </span>
           </div>
-          <div className="flex items-center gap-4">
-            <span className="text-zinc-500 text-sm">{user?.email}</span>
-            <button
-              onClick={handleLogout}
-              className="flex items-center gap-1.5 text-zinc-500 hover:text-zinc-300 text-sm transition-colors"
-            >
-              <LogOut size={15}/>
-              Logout
-            </button>
+          <div className="flex items-center gap-3">
+          <div style={{
+            width: 32, height: 32, borderRadius: '50%',
+            background: avatarColor.bg,
+            border: `1px solid ${avatarColor.border}`,
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            fontSize: 13, fontWeight: 600, color: avatarColor.text,
+            flexShrink: 0,
+          }}>
+            {user?.email?.[0]?.toUpperCase()}
           </div>
+
+          {/* email — hidden on small screens */}
+
+          {/* logout — icon only with tooltip */}
+          <button
+            onClick={handleLogout}
+            title="Logout"
+            style={{
+              width: 32, height: 32, borderRadius: 8,
+              background: 'rgba(255,255,255,0.05)',
+              border: '1px solid rgba(255,255,255,0.08)',
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              cursor: 'pointer', color: 'rgba(255,255,255,0.4)',
+              transition: 'all 0.2s', padding: 0,
+            }}
+            onMouseEnter={e => {
+              e.currentTarget.style.background = 'rgba(239,68,68,0.15)'
+              e.currentTarget.style.color = '#ef4444'
+              e.currentTarget.style.borderColor = 'rgba(239,68,68,0.3)'
+            }}
+            onMouseLeave={e => {
+              e.currentTarget.style.background = 'rgba(255,255,255,0.05)'
+              e.currentTarget.style.color = 'rgba(255,255,255,0.4)'
+              e.currentTarget.style.borderColor = 'rgba(255,255,255,0.08)'
+            }}
+          >
+            <LogOut size={14}/>
+          </button>
+        </div>
         </nav>
 
         <div className="max-w-4xl mx-auto px-6 py-10">
