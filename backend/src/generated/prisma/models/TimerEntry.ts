@@ -504,6 +504,7 @@ export type TimerEntryCreateOrConnectWithoutUserInput = {
 
 export type TimerEntryCreateManyUserInputEnvelope = {
   data: Prisma.TimerEntryCreateManyUserInput | Prisma.TimerEntryCreateManyUserInput[]
+  skipDuplicates?: boolean
 }
 
 export type TimerEntryUpsertWithWhereUniqueWithoutUserInput = {
@@ -557,6 +558,7 @@ export type TimerEntryCreateOrConnectWithoutTaskInput = {
 
 export type TimerEntryCreateManyTaskInputEnvelope = {
   data: Prisma.TimerEntryCreateManyTaskInput | Prisma.TimerEntryCreateManyTaskInput[]
+  skipDuplicates?: boolean
 }
 
 export type TimerEntryUpsertWithWhereUniqueWithoutTaskInput = {
@@ -1375,6 +1377,7 @@ export type TimerEntryCreateManyArgs<ExtArgs extends runtime.Types.Extensions.In
    * The data used to create many TimerEntries.
    */
   data: Prisma.TimerEntryCreateManyInput | Prisma.TimerEntryCreateManyInput[]
+  skipDuplicates?: boolean
 }
 
 /**
@@ -1393,6 +1396,7 @@ export type TimerEntryCreateManyAndReturnArgs<ExtArgs extends runtime.Types.Exte
    * The data used to create many TimerEntries.
    */
   data: Prisma.TimerEntryCreateManyInput | Prisma.TimerEntryCreateManyInput[]
+  skipDuplicates?: boolean
   /**
    * Choose, which related nodes to fetch as well
    */

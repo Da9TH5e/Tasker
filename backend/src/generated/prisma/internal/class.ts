@@ -19,8 +19,8 @@ const config: runtime.GetPrismaClientConfig = {
   "previewFeatures": [],
   "clientVersion": "7.5.0",
   "engineVersion": "280c870be64f457428992c43c1f6d557fab6e29e",
-  "activeProvider": "sqlite",
-  "inlineSchema": "generator client {\n  provider = \"prisma-client\"\n  output   = \"../src/generated/prisma\"\n}\n\ndatasource db {\n  provider = \"sqlite\"\n}\n\nmodel User {\n  id           String       @id @default(cuid())\n  email        String       @unique\n  password     String\n  createdAt    DateTime     @default(now())\n  tasks        Task[]\n  timerEntries TimerEntry[]\n}\n\nmodel Task {\n  id           String       @id @default(cuid())\n  title        String\n  description  String?\n  status       String       @default(\"pending\")\n  timeGoal     Int?\n  createdAt    DateTime     @default(now())\n  updatedAt    DateTime     @updatedAt\n  userId       String\n  user         User         @relation(fields: [userId], references: [id], onDelete: Cascade)\n  timerEntries TimerEntry[]\n}\n\nmodel TimerEntry {\n  id        String   @id @default(cuid())\n  duration  Int\n  beatGoal  Boolean?\n  createdAt DateTime @default(now())\n  taskId    String\n  task      Task     @relation(fields: [taskId], references: [id], onDelete: Cascade)\n  userId    String\n  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)\n}\n",
+  "activeProvider": "postgresql",
+  "inlineSchema": "generator client {\n  provider = \"prisma-client\"\n  output   = \"../src/generated/prisma\"\n}\n\ndatasource db {\n  provider = \"postgresql\"\n}\n\nmodel User {\n  id           String       @id @default(cuid())\n  email        String       @unique\n  password     String\n  createdAt    DateTime     @default(now())\n  tasks        Task[]\n  timerEntries TimerEntry[]\n}\n\nmodel Task {\n  id           String       @id @default(cuid())\n  title        String\n  description  String?\n  status       String       @default(\"pending\")\n  timeGoal     Int?\n  createdAt    DateTime     @default(now())\n  updatedAt    DateTime     @updatedAt\n  userId       String\n  user         User         @relation(fields: [userId], references: [id], onDelete: Cascade)\n  timerEntries TimerEntry[]\n}\n\nmodel TimerEntry {\n  id        String   @id @default(cuid())\n  duration  Int\n  beatGoal  Boolean?\n  createdAt DateTime @default(now())\n  taskId    String\n  task      Task     @relation(fields: [taskId], references: [id], onDelete: Cascade)\n  userId    String\n  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)\n}\n",
   "runtimeDataModel": {
     "models": {},
     "enums": {},
@@ -45,10 +45,10 @@ async function decodeBase64AsWasm(wasmBase64: string): Promise<WebAssembly.Modul
 }
 
 config.compilerWasm = {
-  getRuntime: async () => await import("@prisma/client/runtime/query_compiler_fast_bg.sqlite.js"),
+  getRuntime: async () => await import("@prisma/client/runtime/query_compiler_fast_bg.postgresql.js"),
 
   getQueryCompilerWasmModule: async () => {
-    const { wasm } = await import("@prisma/client/runtime/query_compiler_fast_bg.sqlite.wasm-base64.js")
+    const { wasm } = await import("@prisma/client/runtime/query_compiler_fast_bg.postgresql.wasm-base64.js")
     return await decodeBase64AsWasm(wasm)
   },
 
