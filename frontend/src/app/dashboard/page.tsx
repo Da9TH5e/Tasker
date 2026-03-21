@@ -208,8 +208,19 @@ export default function DashboardPage() {
           WebkitBackdropFilter: 'blur(12px)',
         }}>
           <div className="flex items-center gap-2">
-            <CheckSquare size={20} className="text-teal-400"/>
-            <span className="font-bold text-white tracking-tight">Tasker</span>
+            <div className="text-[#cedadb]"/>
+            <span style={{
+              fontSize: 15,
+              letterSpacing: '0.54em',
+              textTransform: 'uppercase',
+              color: '#cedadb',
+              fontWeight: 400,
+              marginBottom: 12,
+              textAlign: 'center',
+              display: 'block',
+            }}>
+              Tasker
+            </span>
           </div>
           <div className="flex items-center gap-4">
             <span className="text-zinc-500 text-sm">{user?.email}</span>
