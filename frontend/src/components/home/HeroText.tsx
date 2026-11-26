@@ -1,10 +1,11 @@
-'use client'
 import { forwardRef } from 'react'
-import Image from 'next/image'
+import { useNavigate } from 'react-router-dom'
 import StarBorder from "@/components/StarBorder"
 import { TypingAnimation } from "@/components/ui/typing-animation"
 
 const HeroText = forwardRef<HTMLDivElement>((_, ref) => {
+  const navigate = useNavigate()
+
   return (
     <>
       <style>{`
@@ -38,7 +39,7 @@ const HeroText = forwardRef<HTMLDivElement>((_, ref) => {
       >
         {/* logo + app name */}
         <div className="hero-logo flex items-center gap-3 mb-6">
-          <Image
+          <img
             src="/logo.svg"
             alt="Tasker logo"
             width={36}
@@ -89,7 +90,7 @@ const HeroText = forwardRef<HTMLDivElement>((_, ref) => {
               as="button"
               color="cyan"
               speed="5s"
-              onClick={() => window.location.href = '/register'}
+              onClick={() => navigate('/register')}
               className="hover:scale-105 active:scale-95 transition-transform duration-200"
             >
               Get Started
@@ -97,7 +98,7 @@ const HeroText = forwardRef<HTMLDivElement>((_, ref) => {
           </div>
           <div className="hero-btn-2">
             <button
-              onClick={() => window.location.href = '/login'}
+              onClick={() => navigate('/login')}
               className="px-6 py-3 border border-white/10 hover:border-white/25 text-white/60 hover:text-white/90 rounded-xl font-semibold transition-all hover:scale-105 active:scale-95"
             >
               Sign in

@@ -1,5 +1,3 @@
-'use client'
-
 import { Task } from '@/lib/api'
 import { Pencil, Trash2, Clock } from 'lucide-react'
 

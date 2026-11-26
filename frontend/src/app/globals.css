@@ -2,6 +2,11 @@
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
 
+:root {
+  --font-josefin: 'Josefin Sans';
+  --font-roboto: 'Roboto';
+}
+
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
@@ -182,4 +187,15 @@ html, body {
 html::-webkit-scrollbar,
 body::-webkit-scrollbar {
   display: none;
+}
+:where(button, a, input, select, textarea):focus-visible {
+  outline: 2px solid #6dadbe;
+  outline-offset: 3px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
 }

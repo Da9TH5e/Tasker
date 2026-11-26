@@ -7,7 +7,6 @@ export const setTokens = (accessToken: string, refreshToken: string) => {
   if (!isBrowser) return
   localStorage.setItem(TOKEN_KEY, accessToken)
   localStorage.setItem(REFRESH_KEY, refreshToken)
-  document.cookie = `access_token=${accessToken}; path=/; max-age=${15 * 60}; SameSite=Strict`
 }
 
 export const getAccessToken = (): string | null => {
@@ -36,7 +35,6 @@ export const clearAuth = () => {
   localStorage.removeItem(TOKEN_KEY)
   localStorage.removeItem(REFRESH_KEY)
   localStorage.removeItem(USER_KEY)
-  document.cookie = 'access_token=; path=/; max-age=0'
 }
 
 export const isAuthenticated = (): boolean => {

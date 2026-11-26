@@ -1,9 +1,7 @@
 // src/app/dashboard/page
 
-'use client'
-
 import { useState, useEffect } from 'react'
-import { useRouter } from 'next/navigation'
+import { Link, useNavigate } from 'react-router-dom'
 import { tasksAPI, authAPI, Task } from '@/lib/api'
 import { getUser, clearAuth } from '@/lib/auth'
 import toast, { Toaster } from 'react-hot-toast'
@@ -37,7 +35,7 @@ const glassSlab: React.CSSProperties = {
   background: 'rgba(3, 10, 10, 0.55)',
   border: '1px solid rgba(255,255,255,0.08)',
   borderRadius: 20,
-  padding: '28px 32px',
+  padding: 'clamp(16px, 4vw, 32px)',
   backdropFilter: 'blur(24px)',
   WebkitBackdropFilter: 'blur(24px)',
   boxShadow: '0 4px 40px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.02)',
@@ -57,7 +55,7 @@ const slabLabel: React.CSSProperties = {
 }
 
 export default function DashboardPage() {
-  const router = useRouter()
+  const navigate = useNavigate()
   const [user, setUser] = useState<{ id: string; email: string } | null>(null)
 
   useEffect(() => {
@@ -80,6 +78,7 @@ export default function DashboardPage() {
 
   // ── Fetch paginated tasks ─────────────────────────────────────
   useEffect(() => {
+    let active = true
     const fetchTasks = async () => {
       setLoading(true)
       try {
@@ -89,35 +88,43 @@ export default function DashboardPage() {
           status: filter === 'all' ? undefined : filter,
           search: search || undefined,
         })
+        if (!active) return
+        const lastPage = Math.max(1, data.pagination.totalPages)
+        if (page > lastPage) {
+          setPage(lastPage)
+          return
+        }
         setTasks(data.tasks)
         setTotalPages(data.pagination.totalPages)
       } catch {
-        toast.error('Failed to load tasks')
+        if (active) toast.error('Failed to load tasks')
       } finally {
-        setLoading(false)
+        if (active) setLoading(false)
       }
     }
     const timeout = setTimeout(fetchTasks, search ? 400 : 0)
-    return () => clearTimeout(timeout)
+    return () => { active = false; clearTimeout(timeout) }
   }, [page, filter, search, refreshKey])
 
   useEffect(() => {
+    let active = true
     const fetchAll = async () => {
       try {
         const data = await tasksAPI.getAll({ limit: 1000 })
-        setAllTasks(data.tasks)
+        if (active) setAllTasks(data.tasks)
       } catch {
         console.error('Failed to fetch all tasks for stats')
       }
     }
     fetchAll()
-  }, [tasks])
+    return () => { active = false }
+  }, [refreshKey])
 
   // ── Task actions ──────────────────────────────────────────────
   const handleToggle = async (id: string) => {
     try {
       const updated = await tasksAPI.toggle(id)
-      setTasks(prev => prev.map(t => t.id === id ? updated : t))
+      setRefreshKey(prev => prev + 1)
       toast.success(updated.status === 'done' ? 'Task completed! 🎉' : 'Task reopened')
     } catch {
       toast.error('Failed to update task')
@@ -127,7 +134,7 @@ export default function DashboardPage() {
   const handleDelete = async (id: string) => {
     try {
       await tasksAPI.delete(id)
-      setTasks(prev => prev.filter(t => t.id !== id))
+      setRefreshKey(prev => prev + 1)
       toast.success('Task deleted')
     } catch {
       toast.error('Failed to delete task')
@@ -142,8 +149,8 @@ export default function DashboardPage() {
   }) => {
     try {
       if (editingTask) {
-        const updated = await tasksAPI.update(editingTask.id, data)
-        setTasks(prev => prev.map(t => t.id === editingTask.id ? updated : t))
+        await tasksAPI.update(editingTask.id, data)
+        setRefreshKey(prev => prev + 1)
         toast.success('Task updated!')
       } else {
         await tasksAPI.create(data)
@@ -167,7 +174,7 @@ export default function DashboardPage() {
       await authAPI.logout()
     } finally {
       clearAuth()
-      router.push('/login')
+      navigate('/login')
     }
   }
 
@@ -217,7 +224,7 @@ export default function DashboardPage() {
         {/* ── Navbar ─────────────────────────────────────────────── */}
         <nav style={{
           borderBottom: '1px solid rgba(255,255,255,0.06)',
-          padding: '14px 32px',
+          padding: '12px clamp(12px, 4vw, 32px)',
           display: 'flex', alignItems: 'center',
           justifyContent: 'space-between',
           position: 'sticky', top: 0, zIndex: 50,
@@ -241,8 +248,8 @@ export default function DashboardPage() {
               Tasker
             </span>
           </div>
-          <div className="flex items-center gap-3">
-          <div style={{
+          <div className="flex items-center gap-2 sm:gap-3">
+          <div className="!hidden sm:!flex" style={{
             width: 32, height: 32, borderRadius: '50%',
             background: avatarColor.bg,
             border: `1px solid ${avatarColor.border}`,
@@ -253,7 +260,9 @@ export default function DashboardPage() {
             {user?.email?.[0]?.toUpperCase()}
           </div>
 
-          {/* email — hidden on small screens */}
+          <Link to="/change-password" className="rounded-lg border border-white/10 px-3 py-1.5 text-sm text-[#cedadb] hover:border-white/25 hover:text-white">
+            Change password
+          </Link>
 
           {/* logout — icon only with tooltip */}
           <button
@@ -283,7 +292,7 @@ export default function DashboardPage() {
         </div>
         </nav>
 
-        <div className="max-w-4xl mx-auto px-6 py-10">
+        <div className="mx-auto max-w-4xl px-3 py-5 sm:px-6 sm:py-10">
 
           {/* ════════════════════════════════════════════════════════
               SLAB 1 — Overview stats
@@ -293,7 +302,7 @@ export default function DashboardPage() {
               <LayoutDashboard size={13}/>
               Overview
             </div>
-            <div className="grid grid-cols-4 gap-4">
+            <div className="grid grid-cols-2 gap-2 sm:grid-cols-4 sm:gap-4">
               {[
                 { label: 'Total',       value: totalCount,      color: '#fff'    },
                 { label: 'Completed',   value: completedCount,  color: '#0d9488' },
@@ -303,7 +312,7 @@ export default function DashboardPage() {
                 <div key={stat.label} style={{
                   background: 'rgba(255,255,255,0.03)',
                   border: '1px solid rgba(255,255,255,0.06)',
-                  borderRadius: 14, padding: '16px 20px',
+                  borderRadius: 14, padding: '12px clamp(10px, 3vw, 20px)',
                 }}>
                   <div className="text-zinc-500 text-xs mb-1">{stat.label}</div>
                   <div style={{ fontSize: 28, fontWeight: 700, color: stat.color }}>
@@ -327,6 +336,7 @@ export default function DashboardPage() {
             <div className="flex items-center justify-between mt-5 mb-5">
               <h2 className="text-xl font-bold text-white">Tasks</h2>
               <button
+                aria-label="New task"
                 onClick={() => { setEditingTask(null); setModalOpen(true) }}
                 className="flex items-center gap-2 px-4 py-2 bg-[#0b3f43] border-2
                            hover:bg-[#12768a] text-[#cedadb] rounded-xl text-sm
@@ -359,7 +369,7 @@ export default function DashboardPage() {
                   onBlur={e  => e.target.style.borderColor = 'rgba(255,255,255,0.07)'}
                 />
               </div>
-              <div className="flex gap-2">
+              <div className="flex flex-wrap gap-2">
                 {[
                   { key: 'all',         label: 'All'         },
                   { key: 'pending',     label: 'Pending'     },
@@ -368,6 +378,7 @@ export default function DashboardPage() {
                 ].map(f => (
                   <button
                     key={f.key}
+                    aria-pressed={filter === f.key}
                     onClick={() => { setFilter(f.key); setPage(1) }}
                     style={{
                       padding: '5px 14px', borderRadius: 20, fontSize: 13,

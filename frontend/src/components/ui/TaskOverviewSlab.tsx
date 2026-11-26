@@ -1,5 +1,3 @@
-'use client'
-
 function TaskOverviewSlab() {
   const tasks = [
     { title:'Login',                    time:'2 hours ago', status:'Done',        done:true  },

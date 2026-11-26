@@ -1,0 +1,9 @@
+.venv/
+.env
+.env.*
+*.db
+*.db-*
+*.sqlite*
+/tasker-pythonanywhere.zip
+!.env.example
+/tasker-vps.tar.gz

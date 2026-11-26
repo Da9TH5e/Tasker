@@ -1,5 +1,3 @@
-'use client'
-
 import { useRef } from 'react'
 import ClickSpark from "@/components/ClickSpark"
 import HeroBackground from "@/components/home/HeroBackground"

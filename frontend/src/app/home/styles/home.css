@@ -37,3 +37,77 @@ h1, h2, h3 {
 .delay-800  { animation-delay: 0.8s;  }
 .delay-1000 { animation-delay: 1.0s;  }
 .delay-1200 { animation-delay: 1.2s;  }
+.tasker-home {
+  background: #030a0a;
+}
+
+.landing-scroll {
+  height: 200vh;
+  position: relative;
+}
+
+.landing-hero {
+  position: sticky;
+  top: 0;
+  min-height: 100svh;
+  overflow: hidden;
+  background: radial-gradient(ellipse at 75% 25%, #0b3f43, #030a0a 72%);
+}
+
+.landing-intro {
+  position: absolute;
+  left: clamp(24px, 5vw, 80px);
+}
+
+.landing-feature-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(12px, 2vw, 24px);
+  max-width: 940px;
+  width: calc(100% - 48px);
+  pointer-events: auto;
+}
+
+@media (max-width: 950px), (max-height: 650px), (prefers-reduced-motion: reduce) {
+  .landing-scroll {
+    height: auto;
+  }
+
+  .landing-hero {
+    position: relative;
+    padding: clamp(36px, 10vw, 84px) clamp(18px, 6vw, 52px);
+  }
+
+  .landing-intro,
+  .landing-features {
+    position: relative !important;
+    inset: auto !important;
+    transform: none !important;
+    opacity: 1 !important;
+  }
+
+  .landing-decoration {
+    display: none !important;
+  }
+
+  .landing-features {
+    margin-top: clamp(48px, 10vw, 104px);
+    align-items: flex-start !important;
+  }
+
+  .landing-features h2 {
+    text-align: left !important;
+    font-size: clamp(26px, 5.5vw, 40px) !important;
+    margin-bottom: 24px !important;
+  }
+
+  .landing-feature-grid {
+    width: 100%;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 210px), 1fr));
+  }
+
+  .landing-feature-grid > div {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+}

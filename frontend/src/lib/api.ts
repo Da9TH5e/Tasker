@@ -1,7 +1,7 @@
 import axios from 'axios'
 import { getAccessToken, getRefreshToken, setTokens, clearAuth } from './auth'
 
-const BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000'
+const BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000'
 
 const api = axios.create({
   baseURL: BASE_URL,
@@ -17,46 +17,38 @@ api.interceptors.request.use((config) => {
   return config
 })
 
-let isRefreshing = false
+let refreshRequest: Promise<void> | undefined
 
 api.interceptors.response.use(
   (response) => response,
   async (error) => {
     const originalRequest = error.config
-
-    if (error.response?.status === 401 && !originalRequest._retry) {
-      originalRequest._retry = true
-
-      if (isRefreshing) {
-        clearAuth()
-        window.location.href = '/login'
-        return Promise.reject(error)
-      }
-
-      isRefreshing = true
-
-      try {
-        const refreshToken = getRefreshToken()
-        if (!refreshToken) throw new Error('No refresh token')
-
-        const { data } = await axios.post(
-          'http://localhost:5000/auth/refresh',
-          { refreshToken }
-        )
-
-        setTokens(data.accessToken, data.refreshToken)
-        originalRequest.headers.Authorization = `Bearer ${data.accessToken}`
-        return api(originalRequest)
-      } catch {
-        clearAuth()
-        window.location.href = '/login'
-        return Promise.reject(error)
-      } finally {
-        isRefreshing = false
-      }
+    if (error.response?.status !== 401 || !originalRequest || originalRequest._retry ||
+        (originalRequest.url?.startsWith('/auth/') && originalRequest.url !== '/auth/change-password')) {
+      throw error
     }
 
-    return Promise.reject(error)
+    originalRequest._retry = true
+    try {
+      const refreshToken = getRefreshToken()
+      if (!refreshToken) throw error
+
+      refreshRequest ??= axios.post<Pick<AuthResponse, 'accessToken' | 'refreshToken'>>(
+        '/auth/refresh', { refreshToken }, { baseURL: BASE_URL }
+      ).then(({ data }) => {
+        setTokens(data.accessToken, data.refreshToken)
+      }).finally(() => {
+        refreshRequest = undefined
+      })
+
+      await refreshRequest
+    } catch {
+      clearAuth()
+      window.location.replace('/login')
+      throw error
+    }
+
+    return api(originalRequest)
   }
 )
 
@@ -120,6 +112,18 @@ export const authAPI = {
   },
   login: async (email: string, password: string): Promise<AuthResponse> => {
     const { data } = await api.post('/auth/login', { email, password })
+    return data
+  },
+  requestRecoveryCode: async (email: string): Promise<{ message: string }> => {
+    const { data } = await api.post('/auth/forgot-password', { email })
+    return data
+  },
+  resetPassword: async (email: string, code: string, newPassword: string): Promise<{ message: string }> => {
+    const { data } = await api.post('/auth/reset-password', { email, code, newPassword })
+    return data
+  },
+  changePassword: async (newPassword: string): Promise<{ message: string }> => {
+    const { data } = await api.post('/auth/change-password', { newPassword })
     return data
   },
   logout: async (): Promise<void> => {

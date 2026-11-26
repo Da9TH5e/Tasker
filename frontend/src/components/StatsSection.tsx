@@ -1,5 +1,3 @@
-'use client'
-
 import { useRef, useEffect, useState } from 'react'
 import { Task } from '@/lib/api'
 import { Lock, TrendingUp, Calendar } from 'lucide-react'
@@ -130,7 +128,7 @@ export default function StatsSection({
             Today
           </span>
         </div>
-        <div style={{ display: 'flex', gap: 12 }}>
+        <div className="grid grid-cols-2 gap-2 sm:grid-cols-4 sm:gap-3">
           {[
             { label:'Created today',   value: todayTasks.length,     color:'#fff'    },
             { label:'Completed today', value: todayCompleted.length,  color:'#0d9488' },
@@ -162,7 +160,7 @@ export default function StatsSection({
       <div style={{
         background: 'rgba(255,255,255,0.02)',
         border: '1px solid rgba(255,255,255,0.06)',
-        borderRadius: 20, padding: 32,
+        borderRadius: 20, padding: 'clamp(16px, 4vw, 32px)',
         position: 'relative', overflow: 'hidden',
       }}>
 
@@ -198,7 +196,7 @@ export default function StatsSection({
           userSelect: unlocked ? 'auto' : 'none',
         }}>
           <div style={{
-            display: 'flex', gap: 48,
+            display: 'flex', gap: 'clamp(20px, 5vw, 48px)',
             alignItems: 'center', flexWrap: 'wrap',
           }}>
 
@@ -257,7 +255,7 @@ export default function StatsSection({
             </div>
 
             {/* Legend + monthly chart */}
-            <div style={{ flex: 1, minWidth: 200 }}>
+            <div style={{ flex: '1 1 200px', minWidth: 0 }}>
 
               {/* ring legend */}
               <div style={{

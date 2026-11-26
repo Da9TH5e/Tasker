@@ -1,5 +1,3 @@
-'use client'
-
 function CalendarSlab() {
   return (
     <div style={{

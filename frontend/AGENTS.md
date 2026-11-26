@@ -1,5 +1,5 @@
-<!-- BEGIN:nextjs-agent-rules -->
-# This is NOT the Next.js you know
+# Frontend
 
-This version has breaking changes — APIs, conventions, and file structure may all differ from your training data. Read the relevant guide in `node_modules/next/dist/docs/` before writing any code. Heed deprecation notices.
-<!-- END:nextjs-agent-rules -->
+This is a Vite React and TypeScript app. Routes are declared in `src/main.tsx`. The app talks to Flask through `src/lib/api.ts`.
+
+Run `npm run build` to type-check and build the frontend.

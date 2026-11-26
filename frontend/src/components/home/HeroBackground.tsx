@@ -1,4 +1,3 @@
-'use client'
 import Grainient from "../../components/Grainient"
 
 export default function HeroBackground() {

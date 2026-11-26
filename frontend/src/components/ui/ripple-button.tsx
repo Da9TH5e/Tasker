@@ -1,5 +1,3 @@
-"use client"
-
 import React, { MouseEvent, useEffect, useState } from "react"
 
 import { cn } from "@/lib/utils"

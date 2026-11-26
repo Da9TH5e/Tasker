@@ -1,5 +1,3 @@
-'use client'
-
 import { useState, useEffect, useRef } from 'react'
 import { Task, timerAPI, TimerEntry } from '@/lib/api'
 import { Play, Square, RotateCcw, Clock, Trophy, Target } from 'lucide-react'
@@ -122,7 +120,7 @@ export default function TimerSection({ tasks }: Props) {
     <div style={{
       background:'rgba(255,255,255,0.02)',
       border:'1px solid rgba(255,255,255,0.06)',
-      borderRadius:20, padding:32,
+      borderRadius:20, padding:'clamp(16px, 4vw, 32px)',
     }}>
 
       {/* result banner */}
@@ -155,7 +153,7 @@ export default function TimerSection({ tasks }: Props) {
       )}
 
       <div style={{
-        display:'flex', gap:48,
+        display:'flex', gap:'clamp(20px, 5vw, 48px)',
         alignItems:'center', flexWrap:'wrap',
       }}>
 
@@ -283,7 +281,7 @@ export default function TimerSection({ tasks }: Props) {
         </div>
 
         {/* right side */}
-        <div style={{flex:1, minWidth:240}}>
+        <div style={{flex:'1 1 240px', minWidth:0}}>
 
           {/* task selector */}
           <div style={{marginBottom:20}}>
@@ -393,7 +391,7 @@ export default function TimerSection({ tasks }: Props) {
           </div>
 
           {/* stats cards */}
-          <div style={{display:'flex', gap:12, marginBottom:20}}>
+          <div className="mb-5 grid grid-cols-2 gap-2 sm:grid-cols-4 sm:gap-3">
             {[
               { label:'Sessions',     value: mounted ? stats.total       : 0,  color:'#fff'    },
               { label:'Avg time',     value: mounted && stats.total > 0 ? formatTime(stats.avgDuration) : '—', color:'#0d9488' },

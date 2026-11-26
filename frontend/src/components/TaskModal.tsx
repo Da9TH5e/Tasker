@@ -1,5 +1,3 @@
-'use client'
-
 import { useState, useEffect, useRef } from 'react'
 import { Task } from '@/lib/api'
 import { X, Clock } from 'lucide-react'
@@ -152,10 +150,10 @@ export default function TaskModal({ task, onSave, onClose }: Props) {
       <div
         onClick={e => e.stopPropagation()}
         style={{
-          width: '100%', maxWidth: 460,
+          width: '100%', maxWidth: 460, maxHeight: 'calc(100dvh - 32px)', overflowY: 'auto',
           background: '#111113',
           border: '1px solid rgba(255,255,255,0.08)',
-          borderRadius: 20, padding: 28,
+          borderRadius: 20, padding: 'clamp(16px, 5vw, 28px)',
           animation: 'fadeUpFromBottom 0.3s cubic-bezier(0.16,1,0.3,1) forwards',
         }}
       >

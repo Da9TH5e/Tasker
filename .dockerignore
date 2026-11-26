@@ -1,0 +1,12 @@
+.git
+.venv
+**/node_modules
+**/dist
+**/.next
+**/__pycache__
+**/.env*
+**/*.db
+**/*.db-*
+**/*.sqlite*
+**/local-reset-inbox
+/tasker-vps.tar.gz

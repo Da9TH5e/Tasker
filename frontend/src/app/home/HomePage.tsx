@@ -1,8 +1,6 @@
-'use client'
-
 import { useEffect, useRef } from 'react'
 import Grainient from "../../components/Grainient"
-import Image from 'next/image'
+import { useNavigate } from 'react-router-dom'
 import TaskOverviewSlab from "../../components/ui/TaskOverviewSlab"
 import CalendarSlab from "../../components/ui/CalenderSlab"
 import './styles/home.css'
@@ -12,6 +10,7 @@ import ClickSpark from "@/components/ClickSpark"
 import AboutSection from '@/components/home/AboutSection'
 
 function HomePage() {
+  const navigate = useNavigate()
   const heroRef        = useRef<HTMLDivElement>(null)
   const taskSlabRef    = useRef<HTMLDivElement>(null)
   const calSlabRef     = useRef<HTMLDivElement>(null)
@@ -23,6 +22,10 @@ function HomePage() {
 
   useEffect(() => {
     const handleScroll = () => {
+      if (window.matchMedia('(max-width: 950px), (max-height: 650px), (prefers-reduced-motion: reduce)').matches) {
+        if (featuresRef.current) featuresRef.current.inert = false
+        return
+      }
       const scrollY = window.scrollY
       const vh      = window.innerHeight
 
@@ -50,6 +53,7 @@ function HomePage() {
       // --- features section: fades in ---
       if (featuresRef.current) {
         const progress = Math.max(0, Math.min(1, (scrollY - vh * 0.4) / (vh * 0.3)))
+        featuresRef.current.inert = progress < 0.1
         featuresRef.current.style.opacity    = `${progress}`
         featuresRef.current.style.transform  = `translateY(${(1 - progress) * 60}px)`
       }
@@ -67,8 +71,12 @@ function HomePage() {
     }
 
     window.addEventListener('scroll', handleScroll, { passive: true })
+    window.addEventListener('resize', handleScroll)
     handleScroll()
-    return () => window.removeEventListener('scroll', handleScroll)
+    return () => {
+      window.removeEventListener('scroll', handleScroll)
+      window.removeEventListener('resize', handleScroll)
+    }
   }, [])
 
   const features = [
@@ -93,20 +101,14 @@ function HomePage() {
   ]
 
   return (
-    <div className="w-screen h-screen">
+    <div className="tasker-home">
       <ClickSpark sparkColor='#fff' sparkSize={10} sparkRadius={15} sparkCount={8} duration={400}>
 
         {/* scrollable container — 2 screens tall so there's room to scroll */}
-        <div style={{ width: '100vw', height: '200vh', position: 'relative' }}>
+        <div className="landing-scroll">
 
           {/* sticky hero that pins while scrolling */}
-          <div ref={heroRef} style={{
-            position: 'sticky',
-            top: 0,
-            width: '100vw',
-            height: '100vh',
-            overflow: 'hidden',
-          }}>
+          <div ref={heroRef} className="landing-hero">
             {/* background */}
             <div style={{ position: 'absolute', inset: 0, zIndex: 0 }}>
               <Grainient
@@ -138,7 +140,7 @@ function HomePage() {
             {/* text section */}
             <div
               ref={textSectionRef}
-              className="absolute left-16 z-10 max-w-md"
+              className="landing-intro z-10 max-w-md"
               style={{
                 top: '30%',
                 transform: 'translateY(-50%)',
@@ -148,7 +150,7 @@ function HomePage() {
             >
 
               <div className="hero-logo flex items-center gap-3 mb-5">
-                <Image
+                <img
                   src="/logo.svg"
                   alt="Tasker logo"
                   width={32}
@@ -171,7 +173,7 @@ function HomePage() {
                 <span className="text-[#cedadb] text-sm font-medium">Simple. Fast. Productive.</span>
               </div>
 
-              <h1 className="text-5xl font-bold text-[#cedadb] leading-tight mb-4 tracking-tight">
+              <h1 className="text-4xl font-bold sm:text-5xl text-[#cedadb] leading-tight mb-4 tracking-tight">
                 Manage tasks<br/>
                 <span className="text-transparent bg-clip-text bg-linear-to-r from-[#6dadbe] to-[#12768a]">
                   without chaos
@@ -187,13 +189,13 @@ function HomePage() {
                   as="button"
                   color="cyan"
                   speed="5s"
-                  onClick={() => window.location.href = '/register'}
+                  onClick={() => navigate('/register')}
                   className="hover:scale-105 active:scale-95 transition-transform duration-200"
                 >
                   Get Started
                 </StarBorder>
                 <button
-                  onClick={() => window.location.href = '/login'}
+                  onClick={() => navigate('/login')}
                   className="px-6 py-3 border border-white/10 hover:border-white/25 text-white/60 hover:text-white/90 rounded-xl font-semibold transition-all hover:scale-105 active:scale-95"
                 >
                   Sign in
@@ -204,6 +206,8 @@ function HomePage() {
             {/* task slab */}
             <div
               ref={taskSlabRef}
+              className="landing-decoration"
+              aria-hidden="true"
               style={{
                 position: 'absolute',
                 right: -55,
@@ -224,6 +228,8 @@ function HomePage() {
             {/* calendar slab */}
             <div
               ref={calSlabRef}
+              className="landing-decoration"
+              aria-hidden="true"
               style={{
                 position: 'absolute',
                 right: 305,
@@ -244,6 +250,7 @@ function HomePage() {
             {/* features section — overlays hero as you scroll */}
             <div
               ref={featuresRef}
+              className="landing-features"
               style={{
                 position: 'absolute',
                 inset: 0,
@@ -268,13 +275,10 @@ function HomePage() {
                 marginBottom: 56, textAlign: 'center', lineHeight: 1.2,
               }}>
                 Everything you need.<br/>
-                <span style={{ color: '#12768a' }}>Nothing you dont.</span>
+                <span style={{ color: '#12768a' }}>Nothing you don&apos;t.</span>
               </h2>
 
-              <div style={{
-                display: 'flex', gap: 24,
-                pointerEvents: 'auto',
-              }}>
+              <div className="landing-feature-grid">
                 {features.map((f, i) => {
                   const refs = [card1Ref, card2Ref, card3Ref]
                   return (
@@ -282,7 +286,7 @@ function HomePage() {
                       key={i}
                       ref={refs[i]}
                       style={{
-                        width: 280, padding: '32px 28px',
+                        minWidth: 0, padding: 'clamp(20px, 3vw, 32px)',
                         background: 'rgba(3,10,10,0.7)',
                         border: `1px solid ${f.accent}33`,
                         borderRadius: 20,

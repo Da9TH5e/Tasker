@@ -1,6 +1,4 @@
-node_modules
-# Keep environment variables out of version control
+__pycache__/
 .env
-.vscode
-.env
-/generated/prisma
+tasker.db-*
+local-reset-inbox/

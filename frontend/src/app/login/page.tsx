@@ -1,18 +1,16 @@
 // src/app/login/page.tsx
 
-'use client'
-
 import { useState } from 'react'
-import { useRouter } from 'next/navigation'
+import { Link, useNavigate } from 'react-router-dom'
 import { authAPI } from '@/lib/api'
 import { setTokens, setUser } from '@/lib/auth'
-import toast, { Toaster } from 'react-hot-toast'
+import toast from 'react-hot-toast'
 import { Eye, EyeOff } from 'lucide-react'
-import DomeGallery from '@/components/DomeGallery'
+import AuthLayout from '@/components/AuthLayout'
 import { RippleButton } from '@/components/ui/ripple-button'
 
 export default function LoginPage() {
-  const router = useRouter()
+  const navigate = useNavigate()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [showPassword, setShowPassword] = useState(false)
@@ -30,7 +28,7 @@ export default function LoginPage() {
       setTokens(data.accessToken, data.refreshToken)
       setUser(data.user)
       toast.success('Welcome back!')
-      router.push('/dashboard')
+      navigate('/dashboard')
     } catch (err: unknown) {
       const error = err as { response?: { data?: { error?: string } } }
       toast.error(error.response?.data?.error || 'Invalid email or password')
@@ -40,80 +38,7 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="min-h-screen bg-zinc-950" style={{ position: 'relative', overflow: 'hidden' }}>
-
-      {/* Gallery fills the entire background */}
-      <div style={{ position: 'absolute', inset: 0, zIndex: 0, pointerEvents: 'none' }}>
-        <DomeGallery
-          fit={0.6}
-          minRadius={600}
-          maxVerticalRotationDeg={0}
-          segments={34}
-          dragDampening={2}
-        />
-      </div>
-
-      {/* Frosted glass layer over the entire gallery */}
-      <div style={{
-        position: 'absolute', inset: 0, zIndex: 1, pointerEvents: 'none',
-        backdropFilter: 'blur(18px)',
-        WebkitBackdropFilter: 'blur(18px)',
-        background: 'rgba(6, 0, 16, 0.35)',
-      }} />
-
-      {/* Corner vignette — four corners darken heavily */}
-      <div style={{
-        position: 'absolute', inset: 0, zIndex: 2, pointerEvents: 'none',
-        background: `
-          radial-gradient(ellipse 70% 70% at 0% 0%,    rgba(0,0,0,0.92) 0%, transparent 70%),
-          radial-gradient(ellipse 70% 70% at 100% 0%,  rgba(0,0,0,0.92) 0%, transparent 70%),
-          radial-gradient(ellipse 70% 70% at 0% 100%,  rgba(0,0,0,0.92) 0%, transparent 70%),
-          radial-gradient(ellipse 70% 70% at 100% 100%,rgba(0,0,0,0.92) 0%, transparent 70%)
-        `,
-      }} />
-
-      <Toaster position="top-right" toastOptions={{
-        style: {
-          background: '#18181b',
-          color: '#f4f4f5',
-          border: '1px solid #3f3f46',
-          borderRadius: '10px'
-        }
-      }}/>
-
-      {/* Card floats above everything */}
-      <div style={{
-        position: 'relative', zIndex: 10,
-        minHeight: '100vh',
-        display: 'flex', alignItems: 'center', justifyContent: 'center',
-        padding: '0 16px',
-      }}>
-        <div style={{
-          width: '100%', maxWidth: 420,
-          background: 'rgba(3, 10, 10, 0.78)',
-          border: '2px solid rgba(255,255,255,0.09)',
-          borderRadius: 20, padding: 36,
-          boxShadow: '0 8px 60px rgba(0,0,0,0.6), 0 2px 16px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.06)',
-          animation: 'fadeUpFromBottom 0.6s cubic-bezier(0.16,1,0.3,1) forwards',
-        }}>
-
-          {/* logo */}
-          <div className="flex items-center gap-2 mb-8">
-            <div className="text-[#cedadb]"/>
-            <span style={{
-              fontSize: 15,
-              letterSpacing: '0.54em',
-              textTransform: 'uppercase',
-              color: '#cedadb',
-              fontWeight: 400,
-              marginBottom: 12,
-              textAlign: 'center',
-              display: 'block',
-            }}>
-              Tasker
-            </span>
-          </div>
-
+    <AuthLayout>
           <h1 className="text-2xl font-bold text-white mb-1">
             Welcome back
           </h1>
@@ -123,9 +48,11 @@ export default function LoginPage() {
 
           {/* email */}
           <div className="mb-4">
-            <label className="text-[#cedadb] text-sm mb-1.5 block">Email</label>
+            <label htmlFor="email" className="text-[#cedadb] text-sm mb-1.5 block">Email</label>
             <input
               type="email"
+              id="email"
+              autoComplete="username"
               value={email}
               onChange={e => setEmail(e.target.value)}
               placeholder="you@example.com"
@@ -145,10 +72,12 @@ export default function LoginPage() {
 
           {/* password */}
           <div className="mb-6">
-            <label className="text-[#cedadb] text-sm mb-1.5 block">Password</label>
+            <label htmlFor="password" className="text-[#cedadb] text-sm mb-1.5 block">Password</label>
             <div style={{ position: 'relative' }}>
               <input
                 type={showPassword ? 'text' : 'password'}
+                id="password"
+                autoComplete="current-password"
                 value={password}
                 onChange={e => setPassword(e.target.value)}
                 placeholder="Your password"
@@ -167,6 +96,7 @@ export default function LoginPage() {
               <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
+                aria-label={showPassword ? "Hide password" : "Show password"}
                 style={{
                   position: 'absolute', right: 12, top: '50%',
                   transform: 'translateY(-50%)',
@@ -178,6 +108,9 @@ export default function LoginPage() {
                 {showPassword ? <EyeOff size={16}/> : <Eye size={16}/>}
               </button>
             </div>
+            <Link to="/forgot-password" className="mt-3 block text-right text-sm text-[#6dadbe] hover:text-white">
+              Forgot password?
+            </Link>
           </div>
 
           {/* submit */}
@@ -202,16 +135,9 @@ export default function LoginPage() {
           {/* register link */}
           <p className="text-center text-zinc-500 text-sm">
             Don&apos;t have an account?{' '}
-            <span
-              onClick={() => router.push('/register')}
-              className="text-[#12768a] hover:text-[#6dadbe] cursor-pointer transition-colors"
-            >
-              Create one
-            </span>
+            <Link to="/register" className="text-[#6dadbe] hover:text-white transition-colors">Create one</Link>
           </p>
 
-        </div>
-      </div>
-    </div>
+    </AuthLayout>
   )
 }

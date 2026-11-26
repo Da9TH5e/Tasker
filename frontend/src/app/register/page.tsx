@@ -1,18 +1,16 @@
 // src/app/register/page.tsx
 
-'use client'
-
 import { useState } from 'react'
-import { useRouter } from 'next/navigation'
+import { Link, useNavigate } from 'react-router-dom'
 import { authAPI } from '@/lib/api'
 import { setTokens, setUser } from '@/lib/auth'
-import toast, { Toaster } from 'react-hot-toast'
+import toast from 'react-hot-toast'
 import { Eye, EyeOff } from 'lucide-react'
-import DomeGallery from '@/components/DomeGallery'
+import AuthLayout from '@/components/AuthLayout'
 import { RippleButton } from '@/components/ui/ripple-button'
 
 export default function RegisterPage() {
-  const router = useRouter()
+  const navigate = useNavigate()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [confirm, setConfirm] = useState('')
@@ -39,7 +37,7 @@ export default function RegisterPage() {
       setTokens(data.accessToken, data.refreshToken)
       setUser(data.user)
       toast.success('Account created!')
-      router.push('/dashboard')
+      navigate('/dashboard')
     } catch (err: unknown) {
       const error = err as { response?: { data?: { error?: string } } }
       toast.error(error.response?.data?.error || 'Something went wrong')
@@ -49,81 +47,7 @@ export default function RegisterPage() {
   }
 
   return (
-    <div className="min-h-screen bg-[#030a0a]" style={{ position: 'relative', overflow: 'hidden' }}>
-      {/* Gallery fills the entire background */}
-      <div style={{ position: 'absolute', inset: 0, zIndex: 0, pointerEvents: 'none' }}>
-      <DomeGallery
-        fit={0.6}
-        minRadius={600}
-        maxVerticalRotationDeg={0}
-        segments={34}
-        dragDampening={2}
-      />
-      </div>
-
-      {/* Frosted glass layer over the entire gallery */}
-      <div style={{
-        position: 'absolute', inset: 0, zIndex: 1, pointerEvents: 'none',
-        backdropFilter: 'blur(18px)',
-        WebkitBackdropFilter: 'blur(18px)',
-        background: 'rgba(6, 0, 16, 0.35)',
-      }} />
-
-      {/* Corner vignette — four corners slowly darken */}
-      <div style={{
-        position: 'absolute', inset: 0, zIndex: 2, pointerEvents: 'none',
-        background: `
-          radial-gradient(ellipse 60% 60% at 0% 0%,    rgba(0,0,0,0.75) 0%, transparent 70%),
-          radial-gradient(ellipse 60% 60% at 100% 0%,  rgba(0,0,0,0.75) 0%, transparent 70%),
-          radial-gradient(ellipse 60% 60% at 0% 100%,  rgba(0,0,0,0.75) 0%, transparent 70%),
-          radial-gradient(ellipse 60% 60% at 100% 100%,rgba(0,0,0,0.75) 0%, transparent 70%)
-        `,
-      }} />
-
-      <Toaster position="top-right" toastOptions={{
-        style: {
-          background: '#18181b',
-          color: '#f4f4f5',
-          border: '1px solid #3f3f46',
-          borderRadius: '10px'
-        }
-      }}/>
-
-      {/* Card floats above everything */}
-      <div style={{
-        position: 'relative', zIndex: 10,
-        minHeight: '100vh',
-        display: 'flex', alignItems: 'center', justifyContent: 'center',
-        padding: '0 16px',
-      }}>
-      <div style={{
-        width: '100%', maxWidth: 420,
-        background: 'rgba(3, 10, 10, 0.78)',
-        backdropFilter: 'none',
-        WebkitBackdropFilter: 'none',
-        border: '2px solid rgba(255,255,255,0.09)',
-        borderRadius: 20, padding: 36,
-        boxShadow: '0 8px 60px rgba(0,0,0,0.6), 0 2px 16px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.06)',
-        animation: 'fadeUpFromBottom 0.6s cubic-bezier(0.16,1,0.3,1) forwards',
-      }}>
-
-        {/* logo */}
-        <div className="flex items-center gap-2 mb-8">
-          <div className="text-[#cedadb]"/>
-            <span style={{
-              fontSize: 15,
-              letterSpacing: '0.54em',
-              textTransform: 'uppercase',
-              color: '#cedadb',
-              fontWeight: 400,
-              marginBottom: 12,
-              textAlign: 'center',
-              display: 'block',
-            }}>
-              Tasker
-            </span>
-        </div>
-
+    <AuthLayout>
         <h1 className="text-2xl font-bold text-white mb-1">
           Create an account
         </h1>
@@ -133,9 +57,11 @@ export default function RegisterPage() {
 
         {/* email */}
         <div className="mb-4">
-          <label className="text-[#cedadb] text-sm mb-1.5 block">Email</label>
+          <label htmlFor="email" className="text-[#cedadb] text-sm mb-1.5 block">Email</label>
           <input
             type="email"
+            id="email"
+            autoComplete="username"
             value={email}
             onChange={e => setEmail(e.target.value)}
             placeholder="you@example.com"
@@ -155,10 +81,12 @@ export default function RegisterPage() {
 
         {/* password */}
         <div className="mb-4">
-          <label className="text-[#cedadb] text-sm mb-1.5 block">Password</label>
+          <label htmlFor="password" className="text-[#cedadb] text-sm mb-1.5 block">Password</label>
           <div style={{ position: 'relative' }}>
             <input
               type={showPassword ? 'text' : 'password'}
+              id="password"
+              autoComplete="new-password"
               value={password}
               onChange={e => setPassword(e.target.value)}
               placeholder="Min. 6 characters"
@@ -177,6 +105,7 @@ export default function RegisterPage() {
             <button
               type="button"
               onClick={() => setShowPassword(!showPassword)}
+              aria-label={showPassword ? "Hide password" : "Show password"}
               style={{
                 position: 'absolute', right: 12, top: '50%',
                 transform: 'translateY(-50%)',
@@ -196,6 +125,8 @@ export default function RegisterPage() {
           </label>
           <input
             type={showPassword ? 'text' : 'password'}
+            id="confirm-password"
+            autoComplete="new-password"
             value={confirm}
             onChange={e => setConfirm(e.target.value)}
             placeholder="Repeat your password"
@@ -235,16 +166,8 @@ export default function RegisterPage() {
         {/* sign in link */}
         <p className="text-center text-zinc-500 text-sm">
           Already have an account?{' '}
-          <span
-            onClick={() => router.push('/login')}
-            className="text-[#12768a] hover:text-[#6dadbe] cursor-pointer transition-colors"
-          >
-            Sign in
-          </span>
+          <Link to="/login" className="text-[#6dadbe] hover:text-white transition-colors">Sign in</Link>
         </p>
-
-      </div>
-      </div>
-    </div>
+    </AuthLayout>
   )
 }
