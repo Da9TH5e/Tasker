@@ -236,12 +236,11 @@ export default function DashboardPage() {
             <img src="/tasker-logo.png" alt="" width={24} height={24} className="shrink-0" />
             <span style={{
               fontSize: 15,
-              paddingTop: '5px',
+              lineHeight: 1,
               letterSpacing: '0.54em',
               textTransform: 'uppercase',
               color: '#cedadb',
               fontWeight: 400,
-              marginBottom: 12,
               textAlign: 'center',
               display: 'block',
             }}>

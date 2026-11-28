@@ -33,7 +33,7 @@ export default function AboutSection() {
             marginBottom: 12,
             letterSpacing: '-0.02em',
           }}>
-            <img src="/tasker-logo.png" alt="" width={24} height={24} />
+            <img src="/tasker-logo-icy.png" alt="" width={24} height={24} />
             Tasker
           </div>
           <p style={{

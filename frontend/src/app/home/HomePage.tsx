@@ -151,18 +151,17 @@ function HomePage() {
 
               <div className="hero-logo flex items-center gap-3 mb-5">
                 <img
-                  src="/tasker-logo.png"
-                  alt="Tasker logo"
+                  src="/tasker-logo-icy.png"
+                  alt=""
                   width={32}
                   height={32}
                   style={{ display: 'block' }}
                 />
                 <span style={{
-                  paddingLeft: '20px',
-                  paddingTop: '10px', 
+                  lineHeight: 1,
                   fontSize: 22, letterSpacing: '0.54em',
                   textTransform: 'uppercase',
-                  color: '#cedadb', fontWeight: 500, marginBottom: 12,
+                  color: '#cedadb', fontWeight: 500,
                 }}>
                   Tasker
                 </span>
