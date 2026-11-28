@@ -1,12 +1,10 @@
-<img width="1024" height="317" alt="Tasker landing page with task and calendar previews" src="docs/tasker-banner.jpg" />
+<img width="3780" height="1001" alt="Task Flow" src="https://github.com/user-attachments/assets/9b17ff32-7760-4867-98c0-dbe12d829e46" />
 
 ## 📝 Intro
 
 **Tasker** helps you organize your work, track focus sessions, and see your progress. Create tasks, set time goals, and use the dashboard to see what’s pending, in progress, or complete.
 
-👉 **Live** [taskerflow.duckdns.org](https://taskerflow.duckdns.org/)
-
----
+🌐 **Live :** [taskerflow.duckdns.org](https://taskerflow.duckdns.org/)
 
 ## 🧰 Tech Stack
 
@@ -16,9 +14,6 @@
 - **Authentication** — JWT access and refresh tokens, bcrypt, and emailed recovery codes
 - **Deployment** — Hostinger VPS with Docker, Nginx, and HTTPS
 
-[Local setup, API endpoints, and deployment instructions](docs/setup.md)
-
----
 
 ## 🚀 Features (What Users Can Do)
 
@@ -29,7 +24,6 @@
 - 📊 **Review activity stats** and unlock activity rings after completing three tasks.
 - 🔒 **Manage your password** from the dashboard or reset it with a verification code sent to your registered email.
 
----
 
 ## ⚙️ Process (How It Works)
 
@@ -63,7 +57,6 @@ PHASE 4: REVIEW PROGRESS
 └────────────────────────────────────────────────┘
 ```
 
----
 
 ## 📚 What I Learned
 
@@ -73,8 +66,10 @@ PHASE 4: REVIEW PROGRESS
 - Adapting the same visual style to desktop and mobile layouts
 - Deploying a Dockerized app behind Nginx with HTTPS and persistent storage
 
----
 
 ## 🎥 Demo Video
 
-[Watch the Tasker walkthrough](docs/tasker-demo.mp4) to see task creation, filtering, the focus timer, and activity stats.
+
+https://github.com/user-attachments/assets/02fc2161-4c7c-4c82-92c6-146e2a2a4744
+
+
