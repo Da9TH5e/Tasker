@@ -1,4 +1,0 @@
-{$TASKER_HOSTNAME} {
-    encode zstd gzip
-    reverse_proxy tasker:10000
-}
