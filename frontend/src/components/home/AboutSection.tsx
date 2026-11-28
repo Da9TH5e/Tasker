@@ -26,13 +26,14 @@ export default function AboutSection() {
 
         {/* brand */}
         <div style={{ maxWidth: 320 }}>
-          <div style={{
+          <div className="flex items-center gap-2" style={{
             fontSize: 22,
             fontWeight: 700,
             color: '#cedadb',
             marginBottom: 12,
             letterSpacing: '-0.02em',
           }}>
+            <img src="/tasker-logo.png" alt="" width={24} height={24} />
             Tasker
           </div>
           <p style={{

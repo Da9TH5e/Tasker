@@ -151,7 +151,7 @@ function HomePage() {
 
               <div className="hero-logo flex items-center gap-3 mb-5">
                 <img
-                  src="/logo.svg"
+                  src="/tasker-logo.png"
                   alt="Tasker logo"
                   width={32}
                   height={32}

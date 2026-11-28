@@ -40,7 +40,7 @@ const HeroText = forwardRef<HTMLDivElement>((_, ref) => {
         {/* logo + app name */}
         <div className="hero-logo flex items-center gap-3 mb-6">
           <img
-            src="/logo.svg"
+            src="/tasker-logo.png"
             alt="Tasker logo"
             width={36}
             height={36}

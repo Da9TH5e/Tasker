@@ -63,7 +63,7 @@ export default function AuthLayout({ children }: { children: ReactNode }) {
         }}>
 
           <Link to="/" className="mb-7 inline-flex items-center gap-2.5 text-sm tracking-[0.32em] text-[#cedadb] uppercase" aria-label="Tasker home">
-            <img src="/logo.svg" alt="" width={24} height={24} />
+            <img src="/tasker-logo.png" alt="" width={24} height={24} />
             Tasker
           </Link>
           {children}

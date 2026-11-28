@@ -233,7 +233,7 @@ export default function DashboardPage() {
           WebkitBackdropFilter: 'blur(12px)',
         }}>
           <div className="flex items-center gap-2">
-            <div className="text-[#cedadb]"/>
+            <img src="/tasker-logo.png" alt="" width={24} height={24} className="shrink-0" />
             <span style={{
               fontSize: 15,
               paddingTop: '5px',
